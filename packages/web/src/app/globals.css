@@ -1,0 +1,70 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #f2f6f3;
+  --ink: #0f1f18;
+  --surface: #ffffff;
+  --line: #d5e5dc;
+  --muted: #5f7268;
+}
+
+body {
+  background:
+    radial-gradient(ellipse 90% 55% at 0% -10%, #dceee6 0%, transparent 55%),
+    radial-gradient(ellipse 70% 45% at 100% 0%, #e8f1ec 0%, transparent 50%),
+    var(--bg);
+  color: var(--ink);
+  min-height: 100vh;
+}
+
+@layer components {
+  .card {
+    @apply rounded-2xl border border-brand-100/90 bg-white/90 shadow-soft backdrop-blur-sm;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center rounded-xl bg-brand-600 px-3.5 py-2 text-sm font-medium text-white transition duration-200 hover:bg-brand-700 active:scale-[0.98] disabled:opacity-60;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center rounded-xl border border-brand-100 bg-white/80 px-3.5 py-2 text-sm font-medium text-brand-800 transition duration-200 hover:border-brand-200 hover:bg-brand-50 active:scale-[0.98];
+  }
+
+  .btn-quiet {
+    @apply inline-flex items-center justify-center rounded-lg px-2.5 py-1.5 text-xs font-medium text-brand-700 transition hover:bg-brand-50;
+  }
+
+  .input {
+    @apply w-full rounded-xl border border-neutral-200/90 bg-white px-3 py-2 text-sm outline-none transition focus:border-brand-500 focus:ring-2 focus:ring-brand-100;
+  }
+
+  .label {
+    @apply mb-1.5 block text-[11px] font-medium uppercase tracking-[0.08em] text-neutral-500;
+  }
+
+  .module-enter {
+    @apply animate-fade-up;
+  }
+
+  .data-table {
+    @apply w-full text-left text-sm;
+  }
+
+  .data-table thead th {
+    @apply border-b border-brand-100/80 px-4 py-3 text-[11px] font-medium uppercase tracking-[0.08em] text-neutral-500;
+  }
+
+  .data-table tbody tr {
+    @apply border-b border-neutral-100/90 transition-colors last:border-0 hover:bg-brand-50/40;
+  }
+
+  .data-table tbody td {
+    @apply px-4 py-3.5 align-middle;
+  }
+
+  .status-pill {
+    @apply inline-flex items-center rounded-md px-2 py-0.5 text-[11px] font-medium tracking-wide;
+  }
+}

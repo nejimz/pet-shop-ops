@@ -1,0 +1,16 @@
+{
+  "name": "pet-shop-ops",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "pnpm -r --parallel --filter @petshop/api --filter @petshop/web dev",
+    "dev:api": "pnpm --filter @petshop/api dev",
+    "dev:web": "pnpm --filter @petshop/web dev",
+    "start": "pnpm -r --parallel --filter @petshop/api --filter @petshop/web start",
+    "start:api": "pnpm --filter @petshop/api start",
+    "start:web": "pnpm --filter @petshop/web start"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

@@ -1,14 +1,14 @@
 {
   "/_not-found/page": "app/_not-found/page.js",
   "/login/page": "app/login/page.js",
-  "/appointments/page": "app/appointments/page.js",
-  "/owners/[id]/page": "app/owners/[id]/page.js",
-  "/pets/page": "app/pets/page.js",
-  "/products/[id]/page": "app/products/[id]/page.js",
-  "/sales/page": "app/sales/page.js",
   "/owners/page": "app/owners/page.js",
-  "/products/page": "app/products/page.js",
-  "/pets/[id]/page": "app/pets/[id]/page.js",
+  "/owners/[id]/page": "app/owners/[id]/page.js",
   "/page": "app/page.js",
+  "/appointments/page": "app/appointments/page.js",
+  "/pets/[id]/page": "app/pets/[id]/page.js",
+  "/products/[id]/page": "app/products/[id]/page.js",
+  "/pets/page": "app/pets/page.js",
+  "/products/page": "app/products/page.js",
+  "/sales/page": "app/sales/page.js",
   "/staff/page": "app/staff/page.js"
 }

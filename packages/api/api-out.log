@@ -1,0 +1,58 @@
+[Nest] 26804  - 07/29/2026, 5:49:32 AM     LOG [NestFactory] Starting Nest application...
+[Nest] 26804  - 07/29/2026, 5:49:32 AM     LOG [InstanceLoader] PrismaModule dependencies initialized +29ms
+[Nest] 26804  - 07/29/2026, 5:49:32 AM     LOG [InstanceLoader] PassportModule dependencies initialized +1ms
+[Nest] 26804  - 07/29/2026, 5:49:32 AM     LOG [InstanceLoader] TimelineModule dependencies initialized +4ms
+[Nest] 26804  - 07/29/2026, 5:49:32 AM     LOG [InstanceLoader] ConfigHostModule dependencies initialized +1ms
+[Nest] 26804  - 07/29/2026, 5:49:32 AM     LOG [InstanceLoader] UsersModule dependencies initialized +2ms
+[Nest] 26804  - 07/29/2026, 5:49:32 AM     LOG [InstanceLoader] AppointmentsModule dependencies initialized +0ms
+[Nest] 26804  - 07/29/2026, 5:49:32 AM     LOG [InstanceLoader] ProductsModule dependencies initialized +1ms
+[Nest] 26804  - 07/29/2026, 5:49:32 AM     LOG [InstanceLoader] SalesModule dependencies initialized +0ms
+[Nest] 26804  - 07/29/2026, 5:49:32 AM     LOG [InstanceLoader] DashboardModule dependencies initialized +1ms
+[Nest] 26804  - 07/29/2026, 5:49:32 AM     LOG [InstanceLoader] ConfigModule dependencies initialized +0ms
+[Nest] 26804  - 07/29/2026, 5:49:32 AM     LOG [InstanceLoader] ConfigModule dependencies initialized +1ms
+[Nest] 26804  - 07/29/2026, 5:49:32 AM     LOG [InstanceLoader] OwnersModule dependencies initialized +0ms
+[Nest] 26804  - 07/29/2026, 5:49:32 AM     LOG [InstanceLoader] PetsModule dependencies initialized +1ms
+[Nest] 26804  - 07/29/2026, 5:49:32 AM     LOG [InstanceLoader] AppModule dependencies initialized +2ms
+[Nest] 26804  - 07/29/2026, 5:49:32 AM     LOG [InstanceLoader] JwtModule dependencies initialized +1ms
+[Nest] 26804  - 07/29/2026, 5:49:32 AM     LOG [InstanceLoader] AuthModule dependencies initialized +0ms
+[Nest] 26804  - 07/29/2026, 5:49:32 AM     LOG [RoutesResolver] AuthController {/auth}: +10ms
+[Nest] 26804  - 07/29/2026, 5:49:32 AM     LOG [RouterExplorer] Mapped {/auth/login, POST} route +2ms
+[Nest] 26804  - 07/29/2026, 5:49:32 AM     LOG [RouterExplorer] Mapped {/auth/me, GET} route +1ms
+[Nest] 26804  - 07/29/2026, 5:49:32 AM     LOG [RoutesResolver] UsersController {/users}: +1ms
+[Nest] 26804  - 07/29/2026, 5:49:32 AM     LOG [RouterExplorer] Mapped {/users, GET} route +1ms
+[Nest] 26804  - 07/29/2026, 5:49:32 AM     LOG [RouterExplorer] Mapped {/users, POST} route +1ms
+[Nest] 26804  - 07/29/2026, 5:49:32 AM     LOG [RouterExplorer] Mapped {/users/:id, PATCH} route +0ms
+[Nest] 26804  - 07/29/2026, 5:49:32 AM     LOG [RouterExplorer] Mapped {/users/:id, DELETE} route +1ms
+[Nest] 26804  - 07/29/2026, 5:49:32 AM     LOG [RoutesResolver] OwnersController {/owners}: +0ms
+[Nest] 26804  - 07/29/2026, 5:49:32 AM     LOG [RouterExplorer] Mapped {/owners, GET} route +1ms
+[Nest] 26804  - 07/29/2026, 5:49:32 AM     LOG [RouterExplorer] Mapped {/owners/:id, GET} route +0ms
+[Nest] 26804  - 07/29/2026, 5:49:32 AM     LOG [RouterExplorer] Mapped {/owners/:id/timeline, GET} route +0ms
+[Nest] 26804  - 07/29/2026, 5:49:32 AM     LOG [RouterExplorer] Mapped {/owners, POST} route +1ms
+[Nest] 26804  - 07/29/2026, 5:49:32 AM     LOG [RouterExplorer] Mapped {/owners/:id, PATCH} route +0ms
+[Nest] 26804  - 07/29/2026, 5:49:32 AM     LOG [RoutesResolver] PetsController {/pets}: +0ms
+[Nest] 26804  - 07/29/2026, 5:49:32 AM     LOG [RouterExplorer] Mapped {/pets, GET} route +1ms
+[Nest] 26804  - 07/29/2026, 5:49:32 AM     LOG [RouterExplorer] Mapped {/pets/:id, GET} route +0ms
+[Nest] 26804  - 07/29/2026, 5:49:32 AM     LOG [RouterExplorer] Mapped {/pets/:id/timeline, GET} route +0ms
+[Nest] 26804  - 07/29/2026, 5:49:32 AM     LOG [RouterExplorer] Mapped {/pets, POST} route +0ms
+[Nest] 26804  - 07/29/2026, 5:49:32 AM     LOG [RouterExplorer] Mapped {/pets/:id, PATCH} route +1ms
+[Nest] 26804  - 07/29/2026, 5:49:32 AM     LOG [RouterExplorer] Mapped {/pets/:id/archive, POST} route +0ms
+[Nest] 26804  - 07/29/2026, 5:49:32 AM     LOG [RoutesResolver] AppointmentsController {/appointments}: +0ms
+[Nest] 26804  - 07/29/2026, 5:49:32 AM     LOG [RouterExplorer] Mapped {/appointments, GET} route +1ms
+[Nest] 26804  - 07/29/2026, 5:49:32 AM     LOG [RouterExplorer] Mapped {/appointments/:id, GET} route +0ms
+[Nest] 26804  - 07/29/2026, 5:49:32 AM     LOG [RouterExplorer] Mapped {/appointments, POST} route +0ms
+[Nest] 26804  - 07/29/2026, 5:49:32 AM     LOG [RouterExplorer] Mapped {/appointments/:id, PATCH} route +0ms
+[Nest] 26804  - 07/29/2026, 5:49:32 AM     LOG [RouterExplorer] Mapped {/appointments/:id/complete, POST} route +1ms
+[Nest] 26804  - 07/29/2026, 5:49:32 AM     LOG [RoutesResolver] ProductsController {/products}: +0ms
+[Nest] 26804  - 07/29/2026, 5:49:32 AM     LOG [RouterExplorer] Mapped {/products, GET} route +0ms
+[Nest] 26804  - 07/29/2026, 5:49:32 AM     LOG [RouterExplorer] Mapped {/products/:id, GET} route +1ms
+[Nest] 26804  - 07/29/2026, 5:49:32 AM     LOG [RouterExplorer] Mapped {/products, POST} route +0ms
+[Nest] 26804  - 07/29/2026, 5:49:32 AM     LOG [RouterExplorer] Mapped {/products/:id, PATCH} route +0ms
+[Nest] 26804  - 07/29/2026, 5:49:32 AM     LOG [RoutesResolver] SalesController {/sales}: +0ms
+[Nest] 26804  - 07/29/2026, 5:49:32 AM     LOG [RouterExplorer] Mapped {/sales, GET} route +1ms
+[Nest] 26804  - 07/29/2026, 5:49:32 AM     LOG [RouterExplorer] Mapped {/sales/:id, GET} route +0ms
+[Nest] 26804  - 07/29/2026, 5:49:32 AM     LOG [RouterExplorer] Mapped {/sales, POST} route +0ms
+[Nest] 26804  - 07/29/2026, 5:49:32 AM     LOG [RouterExplorer] Mapped {/sales/:id/void, POST} route +0ms
+[Nest] 26804  - 07/29/2026, 5:49:32 AM     LOG [RoutesResolver] DashboardController {/dashboard}: +1ms
+[Nest] 26804  - 07/29/2026, 5:49:32 AM     LOG [RouterExplorer] Mapped {/dashboard, GET} route +0ms
+[Nest] 26804  - 07/29/2026, 5:49:32 AM     LOG [NestApplication] Nest application successfully started +6ms
+Pet Shop Ops API listening on http://localhost:3001

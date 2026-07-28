@@ -1,4 +1,4 @@
-// File: C:\Users\Devden User\Projects\cms-platform\pet-shop-ops\packages\web\src\app\products\page.tsx
+// File: C:\Users\Devden User\Projects\pet-shop-ops\packages\web\src\app\products\page.tsx
 import * as entry from '../../../../src/app/products/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

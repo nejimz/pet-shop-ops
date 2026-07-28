@@ -1,14 +1,14 @@
 {
   "/_not-found/page": "/_not-found",
   "/login/page": "/login",
-  "/appointments/page": "/appointments",
-  "/owners/[id]/page": "/owners/[id]",
-  "/pets/page": "/pets",
-  "/products/[id]/page": "/products/[id]",
-  "/sales/page": "/sales",
   "/owners/page": "/owners",
-  "/products/page": "/products",
-  "/pets/[id]/page": "/pets/[id]",
+  "/owners/[id]/page": "/owners/[id]",
   "/page": "/",
+  "/appointments/page": "/appointments",
+  "/pets/[id]/page": "/pets/[id]",
+  "/products/[id]/page": "/products/[id]",
+  "/pets/page": "/pets",
+  "/products/page": "/products",
+  "/sales/page": "/sales",
   "/staff/page": "/staff"
 }
