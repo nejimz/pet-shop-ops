@@ -1,10 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useEffect, useMemo, useState } from "react";
 import { api } from "@/lib/api";
 import { PageHeader } from "@/components/PageHeader";
-import { EmptyState, ErrorText, StatusPill } from "@/components/ui";
+import { EmptyState, ErrorText, Pagination, StatusPill } from "@/components/ui";
+
+const PAGE_SIZE = 100;
 
 type Product = {
   id: string;
@@ -23,9 +25,11 @@ export default function ProductsPage() {
   const [stockQty, setStockQty] = useState("0");
   const [error, setError] = useState<string | null>(null);
   const [showCreate, setShowCreate] = useState(false);
+  const [page, setPage] = useState(1);
 
   async function refresh() {
     setProducts(await api<Product[]>("/products"));
+    setPage(1);
   }
 
   useEffect(() => {
@@ -55,6 +59,11 @@ export default function ProductsPage() {
       setError(err instanceof Error ? err.message : "Failed");
     }
   }
+
+  const paged = useMemo(
+    () => products.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE),
+    [products, page],
+  );
 
   return (
     <div className="space-y-7">
@@ -115,41 +124,46 @@ export default function ProductsPage() {
         {products.length === 0 ? (
           <EmptyState message="No products yet." />
         ) : (
-          <table className="data-table">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>SKU</th>
-                <th>Price</th>
-                <th>Stock</th>
-                <th>Active</th>
-              </tr>
-            </thead>
-            <tbody>
-              {products.map((p) => (
-                <tr key={p.id}>
-                  <td>
-                    <Link
-                      href={`/products/${p.id}`}
-                      className="font-medium text-brand-800 transition hover:text-brand-600"
-                    >
-                      {p.name}
-                    </Link>
-                  </td>
-                  <td className="font-mono text-xs text-neutral-500">{p.sku}</td>
-                  <td className="tabular-nums text-neutral-700">
-                    ${Number(p.price).toFixed(2)}
-                  </td>
-                  <td className="tabular-nums text-neutral-700">{p.stockQty}</td>
-                  <td>
-                    <StatusPill tone={p.active ? "good" : "neutral"}>
-                      {p.active ? "Yes" : "No"}
-                    </StatusPill>
-                  </td>
+          <>
+            <table className="data-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>SKU</th>
+                  <th>Price</th>
+                  <th>Stock</th>
+                  <th>Active</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {paged.map((p) => (
+                  <tr key={p.id}>
+                    <td>
+                      <Link
+                        href={`/products/${p.id}`}
+                        className="font-medium text-brand-800 transition hover:text-brand-600"
+                      >
+                        {p.name}
+                      </Link>
+                    </td>
+                    <td className="font-mono text-xs text-neutral-500">{p.sku}</td>
+                    <td className="tabular-nums text-neutral-700">
+                      ${Number(p.price).toFixed(2)}
+                    </td>
+                    <td className="tabular-nums text-neutral-700">{p.stockQty}</td>
+                    <td>
+                      <StatusPill tone={p.active ? "good" : "neutral"}>
+                        {p.active ? "Yes" : "No"}
+                      </StatusPill>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <div className="border-t border-brand-100 px-4">
+              <Pagination page={page} pageSize={PAGE_SIZE} total={products.length} onPage={setPage} />
+            </div>
+          </>
         )}
       </div>
     </div>

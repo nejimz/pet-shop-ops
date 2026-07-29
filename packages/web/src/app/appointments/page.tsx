@@ -3,7 +3,9 @@
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import { api } from "@/lib/api";
 import { PageHeader } from "@/components/PageHeader";
-import { EmptyState, ErrorText, StatusPill } from "@/components/ui";
+import { EmptyState, ErrorText, Pagination, StatusPill } from "@/components/ui";
+
+const PAGE_SIZE = 100;
 
 type Owner = { id: string; name: string; pets?: Array<{ id: string; name: string; archivedAt?: string | null }> };
 type Appointment = {
@@ -37,6 +39,7 @@ export default function AppointmentsPage() {
   const [treatments, setTreatments] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [showBook, setShowBook] = useState(false);
+  const [page, setPage] = useState(1);
 
   const pets = useMemo(
     () => owners.find((o) => o.id === ownerId)?.pets?.filter((p) => !p.archivedAt) ?? [],
@@ -56,6 +59,7 @@ export default function AppointmentsPage() {
     ]);
     setAppointments(a);
     setOwners(o);
+    setPage(1);
   }
 
   useEffect(() => {
@@ -118,6 +122,11 @@ export default function AppointmentsPage() {
       setError(err instanceof Error ? err.message : "Failed");
     }
   }
+
+  const paged = useMemo(
+    () => appointments.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE),
+    [appointments, page],
+  );
 
   return (
     <div className="space-y-7">
@@ -228,57 +237,62 @@ export default function AppointmentsPage() {
         {appointments.length === 0 ? (
           <EmptyState message="No appointments in this window." />
         ) : (
-          <table className="data-table">
-            <thead>
-              <tr>
-                <th>When</th>
-                <th>Owner / Pet</th>
-                <th>Type</th>
-                <th>Status</th>
-                <th />
-              </tr>
-            </thead>
-            <tbody>
-              {appointments.map((a) => (
-                <tr key={a.id}>
-                  <td className="whitespace-nowrap text-neutral-700">
-                    {new Date(a.startsAt).toLocaleString()}
-                  </td>
-                  <td>
-                    <p className="font-medium text-brand-900">{a.owner?.name}</p>
-                    <p className="text-sm text-neutral-500">{a.pet?.name}</p>
-                  </td>
-                  <td className="text-neutral-600">{a.type}</td>
-                  <td>
-                    <StatusPill tone={statusTone(a.status)}>{a.status}</StatusPill>
-                  </td>
-                  <td className="text-right">
-                    {a.status === "SCHEDULED" ? (
-                      <div className="flex flex-wrap justify-end gap-1">
-                        <button type="button" className="btn-quiet" onClick={() => setCompleteId(a.id)}>
-                          Complete
-                        </button>
-                        <button
-                          type="button"
-                          className="btn-quiet"
-                          onClick={() => patchStatus(a.id, "CANCELLED")}
-                        >
-                          Cancel
-                        </button>
-                        <button
-                          type="button"
-                          className="btn-quiet"
-                          onClick={() => patchStatus(a.id, "NO_SHOW")}
-                        >
-                          No-show
-                        </button>
-                      </div>
-                    ) : null}
-                  </td>
+          <>
+            <table className="data-table">
+              <thead>
+                <tr>
+                  <th>When</th>
+                  <th>Owner / Pet</th>
+                  <th>Type</th>
+                  <th>Status</th>
+                  <th />
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {paged.map((a) => (
+                  <tr key={a.id}>
+                    <td className="whitespace-nowrap text-neutral-700">
+                      {new Date(a.startsAt).toLocaleString()}
+                    </td>
+                    <td>
+                      <p className="font-medium text-brand-900">{a.owner?.name}</p>
+                      <p className="text-sm text-neutral-500">{a.pet?.name}</p>
+                    </td>
+                    <td className="text-neutral-600">{a.type}</td>
+                    <td>
+                      <StatusPill tone={statusTone(a.status)}>{a.status}</StatusPill>
+                    </td>
+                    <td className="text-right">
+                      {a.status === "SCHEDULED" ? (
+                        <div className="flex flex-wrap justify-end gap-1">
+                          <button type="button" className="btn-quiet" onClick={() => setCompleteId(a.id)}>
+                            Complete
+                          </button>
+                          <button
+                            type="button"
+                            className="btn-quiet"
+                            onClick={() => patchStatus(a.id, "CANCELLED")}
+                          >
+                            Cancel
+                          </button>
+                          <button
+                            type="button"
+                            className="btn-quiet"
+                            onClick={() => patchStatus(a.id, "NO_SHOW")}
+                          >
+                            No-show
+                          </button>
+                        </div>
+                      ) : null}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <div className="border-t border-brand-100 px-4">
+              <Pagination page={page} pageSize={PAGE_SIZE} total={appointments.length} onPage={setPage} />
+            </div>
+          </>
         )}
       </div>
     </div>

@@ -1,10 +1,12 @@
 "use client";
 
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useEffect, useMemo, useState } from "react";
 import { api } from "@/lib/api";
 import { useAuth } from "@/lib/auth";
 import { PageHeader } from "@/components/PageHeader";
-import { EmptyState, ErrorText, StatusPill } from "@/components/ui";
+import { EmptyState, ErrorText, Pagination, StatusPill } from "@/components/ui";
+
+const PAGE_SIZE = 100;
 
 type StaffUser = {
   id: string;
@@ -22,9 +24,11 @@ export default function StaffPage() {
   const [role, setRole] = useState<"ADMIN" | "STAFF">("STAFF");
   const [error, setError] = useState<string | null>(null);
   const [showCreate, setShowCreate] = useState(false);
+  const [page, setPage] = useState(1);
 
   async function refresh() {
     setUsers(await api<StaffUser[]>("/users"));
+    setPage(1);
   }
 
   useEffect(() => {
@@ -61,6 +65,11 @@ export default function StaffPage() {
       setError(err instanceof Error ? err.message : "Failed");
     }
   }
+
+  const paged = useMemo(
+    () => users.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE),
+    [users, page],
+  );
 
   return (
     <div className="space-y-7">
@@ -125,28 +134,33 @@ export default function StaffPage() {
         {users.length === 0 ? (
           <EmptyState message="No staff users." />
         ) : (
-          <table className="data-table">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Role</th>
-              </tr>
-            </thead>
-            <tbody>
-              {users.map((u) => (
-                <tr key={u.id}>
-                  <td className="font-medium text-brand-900">{u.name}</td>
-                  <td className="text-neutral-600">{u.email}</td>
-                  <td>
-                    <StatusPill tone={u.role === "ADMIN" ? "good" : "neutral"}>
-                      {u.role}
-                    </StatusPill>
-                  </td>
+          <>
+            <table className="data-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Role</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {paged.map((u) => (
+                  <tr key={u.id}>
+                    <td className="font-medium text-brand-900">{u.name}</td>
+                    <td className="text-neutral-600">{u.email}</td>
+                    <td>
+                      <StatusPill tone={u.role === "ADMIN" ? "good" : "neutral"}>
+                        {u.role}
+                      </StatusPill>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <div className="border-t border-brand-100 px-4">
+              <Pagination page={page} pageSize={PAGE_SIZE} total={users.length} onPage={setPage} />
+            </div>
+          </>
         )}
       </div>
     </div>

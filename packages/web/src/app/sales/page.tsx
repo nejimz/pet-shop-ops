@@ -3,7 +3,10 @@
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import { api } from "@/lib/api";
 import { PageHeader } from "@/components/PageHeader";
-import { EmptyState, ErrorText, StatusPill } from "@/components/ui";
+import { EmptyState, ErrorText, Pagination, StatusPill } from "@/components/ui";
+
+const PAGE_SIZE = 100;
+const FETCH_LIMIT = 1000;
 
 type Owner = {
   id: string;
@@ -36,6 +39,7 @@ export default function SalesPage() {
   const [qty, setQty] = useState("1");
   const [lines, setLines] = useState<LineDraft[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [page, setPage] = useState(1);
 
   const pets = useMemo(
     () => owners.find((o) => o.id === ownerId)?.pets?.filter((p) => !p.archivedAt) ?? [],
@@ -53,11 +57,12 @@ export default function SalesPage() {
     const [o, p, s] = await Promise.all([
       api<Owner[]>("/owners"),
       api<Product[]>("/products?activeOnly=true"),
-      api<Sale[]>("/sales"),
+      api<Sale[]>(`/sales?limit=${FETCH_LIMIT}`),
     ]);
     setOwners(o);
     setProducts(p);
     setSales(s);
+    setPage(1);
   }
 
   useEffect(() => {
@@ -120,6 +125,11 @@ export default function SalesPage() {
       setError(err instanceof Error ? err.message : "Failed");
     }
   }
+
+  const paged = useMemo(
+    () => sales.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE),
+    [sales, page],
+  );
 
   return (
     <div className="space-y-7">
@@ -245,46 +255,51 @@ export default function SalesPage() {
         {sales.length === 0 ? (
           <EmptyState message="No sales yet." />
         ) : (
-          <table className="data-table">
-            <thead>
-              <tr>
-                <th>When</th>
-                <th>Buyer</th>
-                <th>Items</th>
-                <th>Total</th>
-                <th>Status</th>
-                <th />
-              </tr>
-            </thead>
-            <tbody>
-              {sales.map((sale) => (
-                <tr key={sale.id}>
-                  <td className="whitespace-nowrap text-neutral-600">
-                    {new Date(sale.occurredAt).toLocaleString()}
-                  </td>
-                  <td className="font-medium text-brand-900">
-                    {sale.owner?.name || sale.walkInName || "—"}
-                  </td>
-                  <td className="text-neutral-600">
-                    {sale.lines?.map((l) => `${l.product?.name}×${l.quantity}`).join(", ") || "—"}
-                  </td>
-                  <td className="tabular-nums">${Number(sale.total).toFixed(2)}</td>
-                  <td>
-                    <StatusPill tone={sale.status === "VOIDED" ? "bad" : "good"}>
-                      {sale.status}
-                    </StatusPill>
-                  </td>
-                  <td className="text-right">
-                    {sale.status === "COMPLETED" ? (
-                      <button type="button" className="btn-quiet" onClick={() => voidSale(sale.id)}>
-                        Void
-                      </button>
-                    ) : null}
-                  </td>
+          <>
+            <table className="data-table">
+              <thead>
+                <tr>
+                  <th>When</th>
+                  <th>Buyer</th>
+                  <th>Items</th>
+                  <th>Total</th>
+                  <th>Status</th>
+                  <th />
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {paged.map((sale) => (
+                  <tr key={sale.id}>
+                    <td className="whitespace-nowrap text-neutral-600">
+                      {new Date(sale.occurredAt).toLocaleString()}
+                    </td>
+                    <td className="font-medium text-brand-900">
+                      {sale.owner?.name || sale.walkInName || "—"}
+                    </td>
+                    <td className="text-neutral-600">
+                      {sale.lines?.map((l) => `${l.product?.name}×${l.quantity}`).join(", ") || "—"}
+                    </td>
+                    <td className="tabular-nums">${Number(sale.total).toFixed(2)}</td>
+                    <td>
+                      <StatusPill tone={sale.status === "VOIDED" ? "bad" : "good"}>
+                        {sale.status}
+                      </StatusPill>
+                    </td>
+                    <td className="text-right">
+                      {sale.status === "COMPLETED" ? (
+                        <button type="button" className="btn-quiet" onClick={() => voidSale(sale.id)}>
+                          Void
+                        </button>
+                      ) : null}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <div className="border-t border-brand-100 px-4">
+              <Pagination page={page} pageSize={PAGE_SIZE} total={sales.length} onPage={setPage} />
+            </div>
+          </>
         )}
       </section>
     </div>

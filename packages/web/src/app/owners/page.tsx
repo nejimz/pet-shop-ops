@@ -1,10 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { FormEvent, useCallback, useEffect, useState } from "react";
+import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
 import { api } from "@/lib/api";
 import { PageHeader } from "@/components/PageHeader";
-import { EmptyState, ErrorText } from "@/components/ui";
+import { EmptyState, ErrorText, Pagination } from "@/components/ui";
+
+const PAGE_SIZE = 100;
 
 type Owner = {
   id: string;
@@ -20,11 +22,13 @@ export default function OwnersPage() {
   const [phone, setPhone] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [showCreate, setShowCreate] = useState(false);
+  const [page, setPage] = useState(1);
 
   const load = useCallback(async (query = "") => {
     const path = query ? `/owners?q=${encodeURIComponent(query)}` : "/owners";
     const data = await api<Owner[]>(path);
     setOwners(data);
+    setPage(1);
   }, []);
 
   useEffect(() => {
@@ -57,6 +61,11 @@ export default function OwnersPage() {
       setError(err instanceof Error ? err.message : "Create failed");
     }
   }
+
+  const paged = useMemo(
+    () => owners.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE),
+    [owners, page],
+  );
 
   return (
     <div className="space-y-7">
@@ -110,33 +119,38 @@ export default function OwnersPage() {
         {owners.length === 0 ? (
           <EmptyState message="No owners found." />
         ) : (
-          <table className="data-table">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Phone</th>
-                <th>Pets</th>
-              </tr>
-            </thead>
-            <tbody>
-              {owners.map((owner) => (
-                <tr key={owner.id}>
-                  <td>
-                    <Link
-                      href={`/owners/${owner.id}`}
-                      className="font-medium text-brand-800 transition hover:text-brand-600"
-                    >
-                      {owner.name}
-                    </Link>
-                  </td>
-                  <td className="text-neutral-600">{owner.phone || "—"}</td>
-                  <td className="text-neutral-600">
-                    {owner.pets?.map((p) => p.name).join(", ") || "—"}
-                  </td>
+          <>
+            <table className="data-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Phone</th>
+                  <th>Pets</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {paged.map((owner) => (
+                  <tr key={owner.id}>
+                    <td>
+                      <Link
+                        href={`/owners/${owner.id}`}
+                        className="font-medium text-brand-800 transition hover:text-brand-600"
+                      >
+                        {owner.name}
+                      </Link>
+                    </td>
+                    <td className="text-neutral-600">{owner.phone || "—"}</td>
+                    <td className="text-neutral-600">
+                      {owner.pets?.map((p) => p.name).join(", ") || "—"}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <div className="border-t border-brand-100 px-4">
+              <Pagination page={page} pageSize={PAGE_SIZE} total={owners.length} onPage={setPage} />
+            </div>
+          </>
         )}
       </div>
     </div>
