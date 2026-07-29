@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { api } from "@/lib/api";
+import { useSettings } from "@/lib/settings";
 import { PageHeader } from "@/components/PageHeader";
 import { EmptyState, ErrorText, StatusPill } from "@/components/ui";
 
@@ -65,6 +66,7 @@ function formatDateTime(iso: string) {
 }
 
 export default function DashboardPage() {
+  const { formatMoney } = useSettings();
   const [data, setData] = useState<DashboardData | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -105,7 +107,7 @@ export default function DashboardPage() {
             Today revenue
           </p>
           <p className="mt-3 font-display text-4xl tracking-tight text-brand-700">
-            {data ? `$${Number(data.todayRevenue).toFixed(2)}` : "—"}
+            {data ? formatMoney(data.todayRevenue) : "—"}
           </p>
           <Link
             href="/sales"
@@ -342,7 +344,7 @@ export default function DashboardPage() {
                     {sale.status}
                   </StatusPill>
                   <p className="font-display text-lg text-brand-800">
-                    ${Number(sale.total).toFixed(2)}
+                    {formatMoney(sale.total)}
                   </p>
                 </div>
               </li>

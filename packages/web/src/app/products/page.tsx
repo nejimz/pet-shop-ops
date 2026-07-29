@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import { api } from "@/lib/api";
+import { useSettings } from "@/lib/settings";
 import { PageHeader } from "@/components/PageHeader";
 import { EmptyState, ErrorText, Pagination, StatusPill } from "@/components/ui";
 
@@ -18,6 +19,7 @@ type Product = {
 };
 
 export default function ProductsPage() {
+  const { formatMoney } = useSettings();
   const [products, setProducts] = useState<Product[]>([]);
   const [name, setName] = useState("");
   const [sku, setSku] = useState("");
@@ -148,7 +150,7 @@ export default function ProductsPage() {
                     </td>
                     <td className="font-mono text-xs text-neutral-500">{p.sku}</td>
                     <td className="tabular-nums text-neutral-700">
-                      ${Number(p.price).toFixed(2)}
+                      {formatMoney(p.price)}
                     </td>
                     <td className="tabular-nums text-neutral-700">{p.stockQty}</td>
                     <td>

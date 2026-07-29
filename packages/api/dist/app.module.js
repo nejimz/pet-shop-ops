@@ -20,6 +20,8 @@ const products_module_1 = require("./products/products.module");
 const sales_module_1 = require("./sales/sales.module");
 const timeline_module_1 = require("./timeline/timeline.module");
 const dashboard_module_1 = require("./dashboard/dashboard.module");
+const reports_module_1 = require("./reports/reports.module");
+const settings_module_1 = require("./settings/settings.module");
 const guards_1 = require("./auth/guards");
 const guards_2 = require("./auth/guards");
 let AppModule = class AppModule {
@@ -39,6 +41,8 @@ exports.AppModule = AppModule = __decorate([
             sales_module_1.SalesModule,
             timeline_module_1.TimelineModule,
             dashboard_module_1.DashboardModule,
+            reports_module_1.ReportsModule,
+            settings_module_1.SettingsModule,
         ],
         providers: [
             { provide: core_1.APP_GUARD, useClass: guards_1.JwtAuthGuard },

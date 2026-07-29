@@ -2,10 +2,12 @@
 
 import { FormEvent, useState } from "react";
 import { useAuth } from "@/lib/auth";
+import { useSettings } from "@/lib/settings";
 import { ErrorText } from "@/components/ui";
 
 export default function LoginPage() {
   const { login } = useAuth();
+  const { settings, logoSrc } = useSettings();
   const [email, setEmail] = useState("admin@petshop.local");
   const [password, setPassword] = useState("password123");
   const [error, setError] = useState<string | null>(null);
@@ -37,9 +39,19 @@ export default function LoginPage() {
         onSubmit={onSubmit}
         className="relative w-full max-w-md animate-fade-up rounded-2xl border border-brand-100/80 bg-white/95 p-8 shadow-soft backdrop-blur"
       >
-        <p className="font-display text-3xl tracking-tight text-brand-900">
-          Pet Shop Ops
-        </p>
+        <div className="flex items-center gap-3">
+          {logoSrc ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={logoSrc}
+              alt=""
+              className="h-12 w-12 rounded-xl border border-brand-100 bg-white object-contain p-1"
+            />
+          ) : null}
+          <p className="font-display text-3xl tracking-tight text-brand-900">
+            {settings.appName}
+          </p>
+        </div>
         <p className="mt-2 text-sm leading-relaxed text-neutral-600">
           Sign in to manage consultations, pets, and sales.
         </p>

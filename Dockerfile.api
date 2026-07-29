@@ -1,0 +1,50 @@
+# syntax=docker/dockerfile:1
+
+FROM node:22-bookworm-slim AS deps
+RUN apt-get update \
+  && apt-get install -y --no-install-recommends openssl ca-certificates \
+  && rm -rf /var/lib/apt/lists/* \
+  && corepack enable \
+  && corepack prepare pnpm@9.15.9 --activate
+
+WORKDIR /app
+
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY packages/shared/package.json packages/shared/
+COPY packages/api/package.json packages/api/
+COPY packages/shared/dist packages/shared/dist/
+COPY packages/api/prisma packages/api/prisma/
+
+RUN pnpm install --frozen-lockfile --filter @petshop/api... \
+  && pnpm --filter @petshop/api exec prisma generate
+
+FROM node:22-bookworm-slim AS runner
+RUN apt-get update \
+  && apt-get install -y --no-install-recommends openssl ca-certificates \
+  && rm -rf /var/lib/apt/lists/* \
+  && corepack enable \
+  && corepack prepare pnpm@9.15.9 --activate
+
+ENV NODE_ENV=production \
+  PORT=3001 \
+  DATABASE_URL=file:/data/dev.db \
+  UPLOADS_DIR=/data/uploads
+
+WORKDIR /app
+
+COPY --from=deps /app/node_modules ./node_modules
+COPY --from=deps /app/packages/shared ./packages/shared
+COPY --from=deps /app/packages/api/package.json ./packages/api/
+COPY --from=deps /app/packages/api/node_modules ./packages/api/node_modules
+COPY --from=deps /app/packages/api/prisma ./packages/api/prisma
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY packages/api/dist ./packages/api/dist
+COPY docker/api-entrypoint.sh /app/packages/api/entrypoint.sh
+
+RUN chmod +x /app/packages/api/entrypoint.sh \
+  && mkdir -p /data
+
+WORKDIR /app/packages/api
+EXPOSE 3001
+VOLUME ["/data"]
+ENTRYPOINT ["./entrypoint.sh"]

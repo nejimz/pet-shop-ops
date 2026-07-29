@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { api } from "@/lib/api";
+import { useSettings } from "@/lib/settings";
 import { EmptyState, ErrorText, StatusPill } from "@/components/ui";
 
 type ProductDetail = {
@@ -18,6 +19,7 @@ type ProductDetail = {
 
 export default function ProductDetailPage() {
   const params = useParams<{ id: string }>();
+  const { formatMoney } = useSettings();
   const [product, setProduct] = useState<ProductDetail | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -47,7 +49,7 @@ export default function ProductDetailPage() {
         <div className="card p-5">
           <p className="label mb-0">Price</p>
           <p className="mt-2 font-display text-3xl text-brand-800">
-            ${Number(product.price).toFixed(2)}
+            {formatMoney(product.price)}
           </p>
         </div>
         <div className="card p-5">

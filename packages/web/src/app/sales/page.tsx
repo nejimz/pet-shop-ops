@@ -2,6 +2,7 @@
 
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import { api } from "@/lib/api";
+import { useSettings } from "@/lib/settings";
 import { PageHeader } from "@/components/PageHeader";
 import { EmptyState, ErrorText, Pagination, StatusPill } from "@/components/ui";
 
@@ -28,6 +29,7 @@ type Sale = {
 type LineDraft = { productId: string; quantity: number };
 
 export default function SalesPage() {
+  const { formatMoney } = useSettings();
   const [owners, setOwners] = useState<Owner[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
   const [sales, setSales] = useState<Sale[]>([]);
@@ -204,7 +206,7 @@ export default function SalesPage() {
               <option value="">Select…</option>
               {products.map((p) => (
                 <option key={p.id} value={p.id}>
-                  {p.name} (${Number(p.price).toFixed(2)}) · {p.stockQty} left
+                  {p.name} ({formatMoney(p.price)}) · {p.stockQty} left
                 </option>
               ))}
             </select>
@@ -228,7 +230,7 @@ export default function SalesPage() {
                     {p?.name} × {line.quantity}
                   </span>
                   <span className="tabular-nums text-brand-800">
-                    ${((p ? Number(p.price) : 0) * line.quantity).toFixed(2)}
+                    {formatMoney((p ? Number(p.price) : 0) * line.quantity)}
                   </span>
                 </li>
               );
@@ -238,7 +240,7 @@ export default function SalesPage() {
 
         <div className="flex flex-wrap items-center justify-between gap-3">
           <p className="font-display text-2xl text-brand-900">
-            Total ${total.toFixed(2)}
+            Total {formatMoney(total)}
           </p>
           <button type="submit" className="btn-primary">
             Complete sale
@@ -279,7 +281,7 @@ export default function SalesPage() {
                     <td className="text-neutral-600">
                       {sale.lines?.map((l) => `${l.product?.name}×${l.quantity}`).join(", ") || "—"}
                     </td>
-                    <td className="tabular-nums">${Number(sale.total).toFixed(2)}</td>
+                    <td className="tabular-nums">{formatMoney(sale.total)}</td>
                     <td>
                       <StatusPill tone={sale.status === "VOIDED" ? "bad" : "good"}>
                         {sale.status}

@@ -1,0 +1,16 @@
+**/node_modules
+**/.next
+**/api-err.log
+**/api-out.log
+**/web-err.log
+**/web-out.log
+.git
+.gitignore
+docs
+*.md
+.env
+packages/api/.env
+packages/web/.env.local
+packages/web/.next
+**/*.map
+**/*.tsbuildinfo

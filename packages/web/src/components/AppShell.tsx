@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/lib/auth";
+import { useSettings } from "@/lib/settings";
 
 const NAV = [
   { href: "/", label: "Dashboard" },
@@ -11,7 +12,9 @@ const NAV = [
   { href: "/appointments", label: "Appointments" },
   { href: "/products", label: "Products" },
   { href: "/sales", label: "Sales" },
+  { href: "/reports", label: "Reports" },
   { href: "/staff", label: "Staff", adminOnly: true },
+  { href: "/settings", label: "Settings", adminOnly: true },
 ] as const;
 
 function isActive(pathname: string, href: string) {
@@ -22,6 +25,7 @@ function isActive(pathname: string, href: string) {
 export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const { user, loading, logout } = useAuth();
+  const { settings, logoSrc } = useSettings();
 
   if (pathname === "/login") return <>{children}</>;
 
@@ -48,9 +52,19 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           }}
         />
         <div className="relative px-6 pb-4 pt-7">
-          <p className="font-display text-[1.65rem] leading-none tracking-tight">
-            Pet Shop Ops
-          </p>
+          <div className="flex items-center gap-3">
+            {logoSrc ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={logoSrc}
+                alt=""
+                className="h-10 w-10 rounded-lg bg-white/10 object-contain p-1"
+              />
+            ) : null}
+            <p className="font-display text-[1.65rem] leading-none tracking-tight">
+              {settings.appName}
+            </p>
+          </div>
           <p className="mt-2 text-[11px] font-medium uppercase tracking-[0.14em] text-brand-200/70">
             Consultations · Records · Sales
           </p>

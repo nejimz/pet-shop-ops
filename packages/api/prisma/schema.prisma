@@ -199,3 +199,14 @@ model SaleLine {
   @@index([productId])
   @@map("sale_lines")
 }
+
+model AppSettings {
+  id             String   @id @default("default")
+  appName        String   @default("Pet Shop Ops")
+  currencyCode   String   @default("USD")
+  currencySymbol String   @default("$")
+  logoPath       String?
+  updatedAt      DateTime @updatedAt
+
+  @@map("app_settings")
+}

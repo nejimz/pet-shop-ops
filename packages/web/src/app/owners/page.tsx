@@ -71,7 +71,7 @@ export default function OwnersPage() {
     <div className="space-y-7">
       <PageHeader
         title="Owners"
-        description="Search by name, phone, or pet name."
+        description="Find an owner, then add pets from their profile."
         action={
           <button
             type="button"
@@ -86,7 +86,7 @@ export default function OwnersPage() {
       <form onSubmit={onSearch} className="flex flex-wrap gap-2">
         <input
           className="input max-w-sm"
-          placeholder="Search…"
+          placeholder="Search by owner, phone, or pet…"
           value={q}
           onChange={(e) => setQ(e.target.value)}
         />
@@ -123,28 +123,76 @@ export default function OwnersPage() {
             <table className="data-table">
               <thead>
                 <tr>
-                  <th>Name</th>
+                  <th>Owner</th>
                   <th>Phone</th>
                   <th>Pets</th>
+                  <th className="text-right">Actions</th>
                 </tr>
               </thead>
               <tbody>
-                {paged.map((owner) => (
-                  <tr key={owner.id}>
-                    <td>
-                      <Link
-                        href={`/owners/${owner.id}`}
-                        className="font-medium text-brand-800 transition hover:text-brand-600"
-                      >
-                        {owner.name}
-                      </Link>
-                    </td>
-                    <td className="text-neutral-600">{owner.phone || "—"}</td>
-                    <td className="text-neutral-600">
-                      {owner.pets?.map((p) => p.name).join(", ") || "—"}
-                    </td>
-                  </tr>
-                ))}
+                {paged.map((owner) => {
+                  const pets = owner.pets ?? [];
+                  const shown = pets.slice(0, 3);
+                  const extra = pets.length - shown.length;
+
+                  return (
+                    <tr key={owner.id}>
+                      <td>
+                        <Link
+                          href={`/owners/${owner.id}`}
+                          className="font-medium text-brand-800 transition hover:text-brand-600"
+                        >
+                          {owner.name}
+                        </Link>
+                      </td>
+                      <td className="text-neutral-600">{owner.phone || "—"}</td>
+                      <td>
+                        {pets.length === 0 ? (
+                          <span className="text-sm text-neutral-400">No pets yet</span>
+                        ) : (
+                          <div className="flex flex-wrap items-center gap-1.5">
+                            <span className="status-pill bg-brand-50 text-brand-700">
+                              {pets.length} {pets.length === 1 ? "pet" : "pets"}
+                            </span>
+                            {shown.map((pet) => (
+                              <Link
+                                key={pet.id}
+                                href={`/pets/${pet.id}`}
+                                className="rounded-md bg-neutral-50 px-2 py-0.5 text-xs text-neutral-700 transition hover:bg-brand-50 hover:text-brand-800"
+                              >
+                                {pet.name}
+                              </Link>
+                            ))}
+                            {extra > 0 ? (
+                              <Link
+                                href={`/owners/${owner.id}`}
+                                className="text-xs text-neutral-500 hover:text-brand-700"
+                              >
+                                +{extra} more
+                              </Link>
+                            ) : null}
+                          </div>
+                        )}
+                      </td>
+                      <td className="text-right">
+                        <div className="flex flex-wrap justify-end gap-1">
+                          <Link
+                            href={`/owners/${owner.id}#add-pet`}
+                            className="btn-primary !px-3 !py-1.5 !text-xs"
+                          >
+                            Add pet
+                          </Link>
+                          <Link
+                            href={`/owners/${owner.id}`}
+                            className="btn-quiet"
+                          >
+                            Open
+                          </Link>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
             <div className="border-t border-brand-100 px-4">
