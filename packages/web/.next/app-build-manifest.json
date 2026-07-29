@@ -11,10 +11,20 @@
       "static/chunks/main-app.js",
       "static/chunks/app/products/page.js"
     ],
-    "/_not-found/page": [
+    "/owners/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/_not-found/page.js"
+      "static/chunks/app/owners/page.js"
+    ],
+    "/pets/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/pets/page.js"
+    ],
+    "/sales/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/sales/page.js"
     ]
   }
 }
